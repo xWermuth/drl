@@ -1,6 +1,7 @@
 import tensorflow as tf
+import numpy as np
 
-LEARNING_RATE = 0.0001
+LEARNING_RATE = 2.33e-4
 
 class Agent():
     def __init__(self, input_size) -> None:
@@ -29,5 +30,8 @@ class Agent():
         optimizer = tf.optimizers.Adam(learning_rate=LEARNING_RATE, loss="categorical_crossentropy", name="targets")
         self.model.compile(optimizer=optimizer)
 
-    def fit(self, input, targets):
-        self.model.fit({input: input, targets: targets}, n_epochs=5, snapshot_step=500, show_metric=True, run_id="pendelum")
+    def train(self, X, y):
+        self.model.fit({"input": X}, {"targets": y}, n_epochs=5, snapshot_step=500, show_metric=True, run_id="pendelum")
+
+    def predict(self, prev_observations):
+        return np.argmax(self.model.predict(prev_observations.reshape(-1, len(prev_observations), 1))[0])
