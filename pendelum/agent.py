@@ -27,11 +27,13 @@ class Agent():
         # Output layer
         self.model.add(tf.keras.layers.Dense(2, activation="softmax"))
 
-        optimizer = tf.optimizers.Adam(learning_rate=LEARNING_RATE, loss="categorical_crossentropy", name="targets")
-        self.model.compile(optimizer=optimizer)
+        optimizer = tf.optimizers.Adam(learning_rate=LEARNING_RATE, name="targets")
+        self.model.compile(optimizer=optimizer, loss="categorical_crossentropy")
 
     def train(self, X, y):
-        self.model.fit({"input": X}, {"targets": y}, n_epochs=5, snapshot_step=500, show_metric=True, run_id="pendelum")
+        print(f"X {X.shape}")
+        print(f"y {y.shape}")
+        self.model.fit({"input": X}, {"targets": y}, epochs=5, verbose=2, steps_per_epoch=500)
 
     def predict(self, prev_observations):
         return np.argmax(self.model.predict(prev_observations.reshape(-1, len(prev_observations), 1))[0])

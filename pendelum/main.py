@@ -5,8 +5,8 @@ from agent import Agent
 from data import get_training_data
 
 ENV_NAME = "CartPole-v1"
-NUM_ITERATIONS = 1000
-GOAL_STEPS = 500
+NUM_ITERATIONS = 100
+GOAL_STEPS = 50
 
 # https://medium.com/velotio-perspectives/exploring-openai-gym-a-platform-for-reinforcement-learning-algorithms-380beef446dc#:~:text=According%20to%20the%20OpenAI%20Gym,has%20an%20environment%2Dagent%20arrangement.
 
@@ -34,11 +34,10 @@ def main():
 def train(env: gym.Env):
     scores, training_data = get_training_data(env, NUM_ITERATIONS, GOAL_STEPS)
     X = np.array([i[0] for i in training_data]).reshape(-1, len(training_data[0][0]), 1)
-    y = [i[1] for i in training_data]
-    # agent = Agent(len(X[0]))
-    # agent.train(X, y)
-    # return agent
-    return None
+    y = np.array([i[1] for i in training_data])
+    agent = Agent(len(X[0]))
+    agent.train(X, y)
+    return agent
 
 if __name__ == "__main__":
     main()
